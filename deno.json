@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-net --allow-read --allow-env --allow-ffi --allow-sys --allow-run --unstable-ffi --unstable-kv --unstable-worker-options dev.js",
+    "build": "deno run --allow-net --allow-read --allow-write --allow-env --allow-ffi --allow-sys --allow-run --unstable-ffi --unstable-kv --unstable-worker-options build.js",
+    "preview": "deno run --allow-net --allow-read --allow-env --allow-ffi --allow-sys --allow-run --unstable-ffi --unstable-kv --unstable-worker-options preview.js"
+  },
+  "imports": {
+    "vue": "npm:vue@3.4.15",
+    "vite": "npm:vite@5.1.0",
+    "@vitejs/plugin-vue": "npm:@vitejs/plugin-vue@5.0.3"
+  },
+  "nodeModulesDir": "auto"
+} 

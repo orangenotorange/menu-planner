@@ -1,0 +1,8 @@
+{
+  "imports": {
+    "vue": "https://esm.sh/vue@3.4.15",
+    "tailwindcss": "https://esm.sh/tailwindcss@3.4.1",
+    "postcss": "https://esm.sh/postcss@8.4.35",
+    "autoprefixer": "https://esm.sh/autoprefixer@10.4.17"
+  }
+} 
