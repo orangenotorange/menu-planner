@@ -1,19 +1,21 @@
 {
   "name": "menu-planner",
-  "type": "module",
+  "private": true,
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "@astrojs/tailwind": "^6.0.2",
-    "@astrojs/vue": "^5.1.0",
-    "@tailwindcss/vite": "^4.1.7",
-    "astro": "^5.8.0",
-    "tailwindcss": "^3.4.17",
-    "vue": "^3.5.15"
+    "vue": "^3.4.15"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.3",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "vite": "^5.1.0"
   }
 }
