@@ -3,10 +3,12 @@ import { ref } from 'vue'
 import MealCard from './components/MealCard.vue'
 import RecipeModal from './components/RecipeModal.vue'
 import MealSelectModal from './components/MealSelectModal.vue'
+import RecipeList from './components/RecipeList.vue'
 import { generateWeeklyPlan, generateNewMeal, getAllMeals } from './services/meals'
 
 const showRecipeModal = ref(false)
 const showMealSelectModal = ref(false)
+const showRecipeList = ref(false)
 const selectedRecipe = ref(null)
 const selectedDay = ref(null)
 const weeklyMeals = ref(generateWeeklyPlan())
@@ -37,6 +39,10 @@ const selectMeal = (meal) => {
   }))
   showMealSelectModal.value = false
 }
+
+const toggleRecipeList = () => {
+  showRecipeList.value = !showRecipeList.value
+}
 </script>
 
 <template>
@@ -49,7 +55,7 @@ const selectMeal = (meal) => {
 
     <main class="max-w-6xl mx-auto p-4">
       <div class="space-y-8">
-        <section class="bg-orange-100 rounded-lg p-6 shadow-md">
+        <section v-if="!showRecipeList" class="bg-orange-100 rounded-lg p-6 shadow-md">
           <h2 class="text-2xl font-bold text-orange-600 mb-4">This Week's Menu</h2>
           <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <MealCard
@@ -63,7 +69,7 @@ const selectMeal = (meal) => {
           </div>
         </section>
 
-        <section class="bg-green-100 rounded-lg p-6 shadow-md">
+        <section v-if="!showRecipeList" class="bg-green-100 rounded-lg p-6 shadow-md">
           <h2 class="text-2xl font-bold text-green-600 mb-4">Quick Actions</h2>
           <div class="flex gap-4">
             <button 
@@ -72,10 +78,26 @@ const selectMeal = (meal) => {
             >
               Generate New Plan
             </button>
-            <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors">
+            <button 
+              @click="toggleRecipeList"
+              class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors"
+            >
               View All Recipes
             </button>
           </div>
+        </section>
+
+        <section v-if="showRecipeList" class="bg-white rounded-lg shadow-md">
+          <div class="p-4 bg-green-500 text-white rounded-t-lg flex justify-between items-center">
+            <h2 class="text-2xl font-bold">Recipe Collection</h2>
+            <button 
+              @click="toggleRecipeList"
+              class="bg-white text-green-500 px-4 py-2 rounded-md hover:bg-green-50 transition-colors"
+            >
+              Back to Menu
+            </button>
+          </div>
+          <RecipeList />
         </section>
       </div>
     </main>
