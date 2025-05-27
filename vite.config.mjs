@@ -24,7 +24,11 @@ export default defineConfig({
     // Configure the client build
     rollupOptions: {
       input: './index.html'
-    }
+    },
+    // Ensure we're building for client-side only
+    ssr: false,
+    // Specify the entry point
+    manifest: true
   },
   resolve: {
     alias: {
