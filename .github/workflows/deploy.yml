@@ -33,7 +33,7 @@ jobs:
         uses: denoland/deployctl@v1
         with:
           project: "menu-planner"
-          entrypoint: "index.html"
+          entrypoint: "dist/index.html"
           root: "dist"
           
           
