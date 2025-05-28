@@ -305,11 +305,36 @@ export const useMealStore = () => {
     }));
   };
 
+  const generateRandomWeeklyPlan = () => {
+    const dinnerMeals = availableMeals.value.filter((meal: Meal) => meal.category === 'dinner');
+    const usedMealIds = new Set<string>();
+
+    currentWeekPlan.value.days.forEach((day: DayPlan, index: number) => {
+      let availableDinners = dinnerMeals.filter((meal: Meal) => !usedMealIds.has(meal.id));
+      
+      // If we've used all meals, reset the available options
+      if (availableDinners.length === 0) {
+        availableDinners = dinnerMeals;
+        usedMealIds.clear();
+      }
+
+      const randomIndex = Math.floor(Math.random() * availableDinners.length);
+      const selectedMeal = availableDinners[randomIndex];
+      
+      addMealToDay(index, selectedMeal, 'dinner');
+      usedMealIds.add(selectedMeal.id);
+    });
+  };
+
+  // Generate initial weekly plan
+  generateRandomWeeklyPlan();
+
   return {
     currentWeekPlan,
     availableMeals,
     addMealToDay,
     removeMealFromDay,
     calculateServings,
+    generateRandomWeeklyPlan,
   };
 }; 

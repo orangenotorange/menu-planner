@@ -1,9 +1,9 @@
 <template>
   <div v-if="show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+    <div class="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
       <div class="p-6">
-        <div class="flex justify-between items-start mb-4">
-          <h2 class="text-2xl font-bold text-orange-600">Select a Meal for {{ day }}</h2>
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-orange-600">Select a Meal</h2>
           <button 
             @click="$emit('close')" 
             class="text-gray-500 hover:text-gray-700"
@@ -14,12 +14,12 @@
           </button>
         </div>
 
-        <div class="grid gap-4 md:grid-cols-2">
-          <div 
-            v-for="meal in availableMeals" 
-            :key="meal.name"
+        <div class="grid gap-4">
+          <div
+            v-for="meal in availableMeals.filter(m => m.category === 'dinner')"
+            :key="meal.id"
+            class="border rounded-lg p-4 hover:bg-orange-50 cursor-pointer transition-colors"
             @click="$emit('select', meal)"
-            class="bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-orange-500 transition-colors"
           >
             <h3 class="font-medium text-orange-600">{{ meal.name }}</h3>
             <div class="mt-2 space-y-2">
@@ -27,7 +27,7 @@
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                {{ meal.prepTime }} mins
+                {{ meal.preparationTime }} mins
               </p>
               <p class="text-sm text-gray-600 flex items-center">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,9 +35,13 @@
                 </svg>
                 {{ meal.ingredients.length }} ingredients
               </p>
-              <div class="text-sm text-gray-500">
-                <span class="text-xs bg-orange-100 text-orange-600 px-2 py-1 rounded-full">
-                  Click to select
+              <div class="flex flex-wrap gap-2">
+                <span
+                  v-for="tag in meal.dietaryTags"
+                  :key="tag"
+                  class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full"
+                >
+                  {{ tag }}
                 </span>
               </div>
             </div>
@@ -55,7 +59,7 @@ defineProps({
     required: true
   },
   day: {
-    type: String,
+    type: Number,
     required: true
   },
   availableMeals: {

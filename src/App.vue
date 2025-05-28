@@ -5,40 +5,29 @@ import RecipeModal from './components/RecipeModal.vue'
 import MealSelectModal from './components/MealSelectModal.vue'
 import RecipeList from './components/RecipeList.vue'
 import ShoppingList from './components/ShoppingList.vue'
-import { generateWeeklyPlan, generateNewMeal, getAllMeals } from './services/meals'
+import { useMealStore } from './stores/mealStore'
+
+const { currentWeekPlan, availableMeals, addMealToDay, removeMealFromDay, generateRandomWeeklyPlan } = useMealStore()
 
 const showRecipeModal = ref(false)
 const showMealSelectModal = ref(false)
 const showRecipeList = ref(false)
 const showShoppingList = ref(false)
 const selectedRecipe = ref(null)
-const selectedDay = ref(null)
-const weeklyMeals = ref(generateWeeklyPlan())
+const selectedDayIndex = ref(null)
 
 const showRecipe = (meal) => {
   selectedRecipe.value = meal
   showRecipeModal.value = true
 }
 
-const generateNewPlan = () => {
-  weeklyMeals.value = generateWeeklyPlan()
-}
-
-const openMealSelect = (day) => {
-  selectedDay.value = day
+const openMealSelect = (dayIndex) => {
+  selectedDayIndex.value = dayIndex
   showMealSelectModal.value = true
 }
 
-const getAvailableMeals = () => {
-  const currentMealNames = weeklyMeals.value.map(m => m.meal.name)
-  return getAllMeals().filter(meal => !currentMealNames.includes(meal.name))
-}
-
 const selectMeal = (meal) => {
-  weeklyMeals.value = weeklyMeals.value.map(({ day, meal: currentMeal }) => ({
-    day,
-    meal: day === selectedDay.value ? meal : currentMeal
-  }))
+  addMealToDay(selectedDayIndex.value, meal, 'dinner')
   showMealSelectModal.value = false
 }
 
@@ -75,12 +64,12 @@ const toggleShoppingList = () => {
           <h2 class="text-2xl font-bold text-orange-600 mb-4">This Week's Menu</h2>
           <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <MealCard
-              v-for="{ day, meal } in weeklyMeals"
-              :key="day"
-              :day="day"
-              :meal="meal"
-              @click="showRecipe(meal)"
-              @change-meal="openMealSelect(day)"
+              v-for="(day, index) in currentWeekPlan.days"
+              :key="index"
+              :day="day.date"
+              :meal="day.dinner"
+              @click="showRecipe(day.dinner)"
+              @change-meal="openMealSelect(index)"
             />
           </div>
         </section>
@@ -89,7 +78,7 @@ const toggleShoppingList = () => {
           <h2 class="text-2xl font-bold text-green-600 mb-4">Quick Actions</h2>
           <div class="flex flex-wrap gap-4">
             <button 
-              @click="generateNewPlan"
+              @click="generateRandomWeeklyPlan"
               class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition-colors"
             >
               Generate New Plan
@@ -142,8 +131,8 @@ const toggleShoppingList = () => {
 
     <MealSelectModal
       :show="showMealSelectModal"
-      :day="selectedDay"
-      :available-meals="getAvailableMeals()"
+      :day="selectedDayIndex"
+      :available-meals="availableMeals"
       @close="showMealSelectModal = false"
       @select="selectMeal"
     />
