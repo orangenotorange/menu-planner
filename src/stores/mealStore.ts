@@ -2,14 +2,29 @@ import { ref, computed } from 'vue';
 import type { Meal, WeekPlan, DayPlan } from '../types/meals';
 
 export const useMealStore = () => {
+  const getStartOfWeek = () => {
+    const today = new Date();
+    const day = today.getDay();
+    // If today is Sunday (0), we need to go back 6 days to get to Monday
+    // Otherwise, we go back (day - 1) days to get to Monday
+    const diff = day === 0 ? 6 : (day - 1);
+    today.setDate(today.getDate() - diff);
+    today.setHours(0, 0, 0, 0);
+    return today;
+  };
+
   const currentWeekPlan = ref<WeekPlan>({
-    startDate: new Date(),
-    days: Array.from({ length: 7 }, (_, i) => ({
-      date: new Date(new Date().setDate(new Date().getDate() + i)),
-      breakfast: null,
-      lunch: null,
-      dinner: null,
-    })),
+    startDate: getStartOfWeek(),
+    days: Array.from({ length: 7 }, (_, i) => {
+      const date = new Date(getStartOfWeek());
+      date.setDate(date.getDate() + i);
+      return {
+        date,
+        breakfast: null,
+        lunch: null,
+        dinner: null,
+      };
+    }),
   });
 
   const sampleMeals: Meal[] = [
@@ -18,6 +33,8 @@ export const useMealStore = () => {
       name: 'Pancakes with Fresh Berries',
       category: 'breakfast',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 2, unit: 'pancakes' },
+      calories: 350,
       ingredients: [
         { name: 'flour', amount: 2, unit: 'cups' },
         { name: 'milk', amount: 2, unit: 'cups' },
@@ -32,6 +49,8 @@ export const useMealStore = () => {
       name: 'Grilled Chicken Salad',
       category: 'lunch',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 400, unit: 'g' },
+      calories: 420,
       ingredients: [
         { name: 'chicken breast', amount: 600, unit: 'g' },
         { name: 'mixed greens', amount: 400, unit: 'g' },
@@ -46,6 +65,8 @@ export const useMealStore = () => {
       name: 'Quick Pasta with Marinara',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 350, unit: 'g' },
+      calories: 480,
       ingredients: [
         { name: 'pasta', amount: 500, unit: 'g' },
         { name: 'marinara sauce', amount: 500, unit: 'ml' },
@@ -61,6 +82,8 @@ export const useMealStore = () => {
       name: 'Fish Tacos',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 2, unit: 'tacos' },
+      calories: 380,
       ingredients: [
         { name: 'white fish fillets', amount: 600, unit: 'g' },
         { name: 'corn tortillas', amount: 8, unit: 'pieces' },
@@ -77,6 +100,8 @@ export const useMealStore = () => {
       name: 'Quick Stir-Fry Rice',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 300, unit: 'g' },
+      calories: 450,
       ingredients: [
         { name: 'cooked rice', amount: 600, unit: 'g' },
         { name: 'frozen vegetables', amount: 400, unit: 'g' },
@@ -92,6 +117,8 @@ export const useMealStore = () => {
       name: 'Sheet Pan Sausage and Veggies',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 350, unit: 'g' },
+      calories: 520,
       ingredients: [
         { name: 'chicken sausage', amount: 500, unit: 'g' },
         { name: 'bell peppers', amount: 3, unit: 'units' },
@@ -107,6 +134,8 @@ export const useMealStore = () => {
       name: 'Quesadilla Party',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 2, unit: 'quesadillas' },
+      calories: 580,
       ingredients: [
         { name: 'flour tortillas', amount: 8, unit: 'pieces' },
         { name: 'shredded cheese', amount: 400, unit: 'g' },
@@ -123,6 +152,8 @@ export const useMealStore = () => {
       name: 'Breakfast for Dinner',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 1, unit: 'plate' },
+      calories: 650,
       ingredients: [
         { name: 'eggs', amount: 8, unit: 'units' },
         { name: 'bacon', amount: 200, unit: 'g' },
@@ -138,6 +169,8 @@ export const useMealStore = () => {
       name: 'Pesto Tortellini',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 300, unit: 'g' },
+      calories: 520,
       ingredients: [
         { name: 'cheese tortellini', amount: 500, unit: 'g' },
         { name: 'pesto sauce', amount: 200, unit: 'g' },
@@ -153,6 +186,8 @@ export const useMealStore = () => {
       name: 'Asian Noodle Bowl',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 400, unit: 'g' },
+      calories: 480,
       ingredients: [
         { name: 'udon noodles', amount: 400, unit: 'g' },
         { name: 'frozen edamame', amount: 200, unit: 'g' },
@@ -169,6 +204,8 @@ export const useMealStore = () => {
       name: 'Turkey Wrap Station',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 1, unit: 'wrap' },
+      calories: 420,
       ingredients: [
         { name: 'large tortillas', amount: 8, unit: 'pieces' },
         { name: 'sliced turkey', amount: 400, unit: 'g' },
@@ -185,6 +222,8 @@ export const useMealStore = () => {
       name: 'Quick Greek Pita Pizzas',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 2, unit: 'pitas' },
+      calories: 380,
       ingredients: [
         { name: 'pita bread', amount: 6, unit: 'pieces' },
         { name: 'hummus', amount: 300, unit: 'g' },
@@ -201,6 +240,8 @@ export const useMealStore = () => {
       name: 'Sweet Potato Bowl',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 2, unit: 'medium' },
+      calories: 350,
       ingredients: [
         { name: 'sweet potatoes', amount: 4, unit: 'medium' },
         { name: 'black beans', amount: 400, unit: 'g' },
@@ -217,6 +258,8 @@ export const useMealStore = () => {
       name: 'BBQ Chicken Sliders',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 12, unit: 'pieces' },
+      calories: 580,
       ingredients: [
         { name: 'slider buns', amount: 12, unit: 'pieces' },
         { name: 'rotisserie chicken', amount: 500, unit: 'g' },
@@ -232,6 +275,8 @@ export const useMealStore = () => {
       name: 'Mediterranean Couscous',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 300, unit: 'g' },
+      calories: 450,
       ingredients: [
         { name: 'couscous', amount: 300, unit: 'g' },
         { name: 'chickpeas', amount: 400, unit: 'g' },
@@ -248,6 +293,8 @@ export const useMealStore = () => {
       name: 'Creamy Mac and Cheese',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 500, unit: 'g' },
+      calories: 650,
       ingredients: [
         { name: 'macaroni', amount: 500, unit: 'g' },
         { name: 'cheddar cheese', amount: 300, unit: 'g' },
@@ -264,6 +311,8 @@ export const useMealStore = () => {
       name: 'Cuban-Style Rice and Beans',
       category: 'dinner',
       servings: { adult: 2, child: 2 },
+      servingSize: { amount: 400, unit: 'g' },
+      calories: 420,
       ingredients: [
         { name: 'rice', amount: 400, unit: 'g' },
         { name: 'black beans', amount: 500, unit: 'g' },

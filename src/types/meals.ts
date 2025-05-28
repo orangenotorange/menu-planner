@@ -6,6 +6,11 @@ export interface Meal {
     adult: number;
     child: number;
   };
+  servingSize: {
+    amount: number;
+    unit: string;
+  };
+  calories: number;
   ingredients: Ingredient[];
   preparationTime: number;
   dietaryTags: string[];
