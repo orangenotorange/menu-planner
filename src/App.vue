@@ -43,14 +43,23 @@ const toggleShoppingList = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-orange-50">
-    <header class="bg-green-500 text-white p-4 shadow-lg">
-      <nav class="max-w-6xl mx-auto flex justify-between items-center">
-        <h1 class="text-2xl font-bold">Menu Planner</h1>
+  <div class="min-h-screen bg-gradient-to-br from-[#ff8c42] via-[#4b7f52] to-[#ffd6b9] relative overflow-hidden">
+    <!-- Background shapes for depth -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute top-[-5%] left-[-5%] w-[40%] h-[40%] rounded-full bg-[#ff8c42] opacity-20 blur-3xl"></div>
+      <div class="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] rounded-full bg-[#4b7f52] opacity-20 blur-3xl"></div>
+      <div class="absolute top-[30%] right-[20%] w-[30%] h-[30%] rounded-full bg-[#ffd6b9] opacity-20 blur-3xl"></div>
+    </div>
+
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/70 shadow-lg border-b border-white/20">
+      <nav class="max-w-6xl mx-auto flex justify-between items-center p-4">
+        <h1 class="text-2xl font-bold bg-gradient-to-r from-[#4b7f52] to-[#ff8c42] bg-clip-text text-transparent">
+          Menu Planner
+        </h1>
         <div v-if="showShoppingList || showRecipeList" class="flex gap-2">
           <button 
             @click="showShoppingList = false; showRecipeList = false"
-            class="bg-white text-green-500 px-4 py-2 rounded-md hover:bg-green-50 transition-colors"
+            class="px-4 py-2 rounded-lg backdrop-blur-sm bg-white/30 hover:bg-white/40 border border-white/50 shadow-sm transition-all text-[#4b7f52]"
           >
             Back to Menu
           </button>
@@ -60,8 +69,10 @@ const toggleShoppingList = () => {
 
     <main class="max-w-6xl mx-auto p-4">
       <div class="space-y-8">
-        <section v-if="!showRecipeList && !showShoppingList" class="bg-orange-100 rounded-lg p-6 shadow-md">
-          <h2 class="text-2xl font-bold text-orange-600 mb-4">This Week's Menu</h2>
+        <section v-if="!showRecipeList && !showShoppingList" class="rounded-xl backdrop-blur-md bg-white/40 p-6 shadow-xl border border-white/50">
+          <h2 class="text-2xl font-bold bg-gradient-to-r from-[#4b7f52] to-[#ff8c42] bg-clip-text text-transparent mb-4">
+            This Week's Menu
+          </h2>
           <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <MealCard
               v-for="(day, index) in currentWeekPlan.days"
@@ -74,24 +85,26 @@ const toggleShoppingList = () => {
           </div>
         </section>
 
-        <section v-if="!showRecipeList && !showShoppingList" class="bg-green-100 rounded-lg p-6 shadow-md">
-          <h2 class="text-2xl font-bold text-green-600 mb-4">Quick Actions</h2>
+        <section v-if="!showRecipeList && !showShoppingList" class="rounded-xl backdrop-blur-md bg-white/40 p-6 shadow-xl border border-white/50">
+          <h2 class="text-2xl font-bold bg-gradient-to-r from-[#4b7f52] to-[#ff8c42] bg-clip-text text-transparent mb-4">
+            Quick Actions
+          </h2>
           <div class="flex flex-wrap gap-4">
             <button 
               @click="generateRandomWeeklyPlan"
-              class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md transition-colors"
+              class="px-4 py-2 rounded-lg backdrop-blur-sm bg-[#ff8c42]/80 hover:bg-[#ff8c42]/90 text-white shadow-lg transition-all"
             >
               Generate New Plan
             </button>
             <button 
               @click="toggleRecipeList"
-              class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md transition-colors"
+              class="px-4 py-2 rounded-lg backdrop-blur-sm bg-[#4b7f52]/80 hover:bg-[#4b7f52]/90 text-white shadow-lg transition-all"
             >
               View All Recipes
             </button>
             <button 
               @click="toggleShoppingList"
-              class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md transition-colors flex items-center gap-2"
+              class="px-4 py-2 rounded-lg backdrop-blur-sm bg-blue-500/80 hover:bg-blue-500/90 text-white shadow-lg transition-all flex items-center gap-2"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -101,15 +114,15 @@ const toggleShoppingList = () => {
           </div>
         </section>
 
-        <section v-if="showRecipeList" class="bg-white rounded-lg shadow-md">
-          <div class="p-4 bg-green-500 text-white rounded-t-lg">
+        <section v-if="showRecipeList" class="rounded-xl backdrop-blur-md bg-white/40 shadow-xl border border-white/50">
+          <div class="p-4 bg-gradient-to-r from-[#4b7f52]/80 to-[#4b7f52]/90 text-white rounded-t-xl">
             <h2 class="text-2xl font-bold">Recipe Collection</h2>
           </div>
           <RecipeList />
         </section>
 
-        <section v-if="showShoppingList" class="bg-white rounded-lg shadow-md">
-          <div class="p-4 bg-green-500 text-white rounded-t-lg">
+        <section v-if="showShoppingList" class="rounded-xl backdrop-blur-md bg-white/40 shadow-xl border border-white/50">
+          <div class="p-4 bg-gradient-to-r from-[#4b7f52]/80 to-[#4b7f52]/90 text-white rounded-t-xl">
             <h2 class="text-2xl font-bold">Shopping List</h2>
           </div>
           <ShoppingList />
@@ -117,8 +130,8 @@ const toggleShoppingList = () => {
       </div>
     </main>
 
-    <footer class="bg-orange-100 p-4 mt-8">
-      <div class="max-w-6xl mx-auto text-center text-orange-600">
+    <footer class="mt-8 backdrop-blur-md bg-white/30 border-t border-white/20">
+      <div class="max-w-6xl mx-auto p-4 text-center text-[#4b7f52]/70">
         <p>© 2024 Menu Planner. All rights reserved.</p>
       </div>
     </footer>
@@ -139,17 +152,10 @@ const toggleShoppingList = () => {
   </div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+<style>
+:root {
+  --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+  --glass-bg: rgba(255, 255, 255, 0.4);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 </style>
